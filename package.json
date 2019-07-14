@@ -1,0 +1,16 @@
+{
+  "name": "tbg-content-api",
+  "version": "1.0.0",
+  "description": "API to handle the Big Give's user-generated content",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Noel Light-Hilary <tech@thebiggive.org.uk>",
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "aws-sdk": "^2.493.0",
+    "file-type": "^12.0.1",
+    "uuid": "^3.3.2"
+  }
+}
