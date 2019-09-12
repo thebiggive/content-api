@@ -5,5 +5,6 @@ which provides the `POST` endpoint for the Big Give's user-generated content API
 
 ## Package for Lambda manually
 
-* Zip up the *contents* of the folder (not the whole folder), including `node_modules/`.
+* Zip up the *contents* of the folder (not the whole folder), including `node_modules/`. This
+  need not include normally-hidden files like `.git*` metadata.
 * Upload [here](https://eu-west-2.console.aws.amazon.com/lambda/home?region=eu-west-2#/functions/content-api-post-sandbox?tab=graph).

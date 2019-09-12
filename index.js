@@ -39,23 +39,38 @@ exports.handler = function (event, context, callback) {
   }
 
   const generatedName = `${uuidv4()}.${mimeType.ext}`;
-
   const path = `${data.accountId}/${data.type}/${generatedName}`;
+
+  const metadata = {
+    SalesforceAccountId: data.accountId,
+  };
+  // All remaining metadata keys are optional. We can't append `null`s as this is not a valid value for headers.
+  if (data.ccampaignId) {
+    metadata.SalesforceCCampaignId = data.ccampaignId;
+  }
+  if (data.contentDocumentId) {
+    metadata.SalesforceContentDocumentId = data.contentDocumentId;
+  }
+  if (data.contentType) {
+    metadata.SalesforceContentType = data.contentType;
+  }
+  if (data.contentVersionId) {
+    metadata.SalesforceContentVersionId = data.contentVersionId;
+  }
+  if (data.name) {
+    metadata.SalesforceFilename = data.name;
+  }
+  if (data.userId) {
+    metadata.SalesforceUserId = data.userId;
+  }
+
   const s3Params = {
     ACL: 'public-read',
     Body: decodedImage,
     Bucket: process.env.S3_BUCKET,
     ContentType: mimeType.mime,
     Key: path,
-    Metadata: {
-      SalesforceAccountId: data.accountId,
-      SalesforceCCampaignId: data.ccampaignId ? data.ccampaignId : null,
-      SalesforceContentDocumentId: data.contentDocumentId ? data.contentDocumentId : null,
-      SalesforceContentType: data.contentType ? data.contentType : null,
-      SalesforceContentVersionId: data.contentVersionId ? data.contentVersionId : null,
-      SalesforceFilename: data.name ? data.name : null,
-      SalesforceUserId: data.userId ? data.userId : null,
-    }
+    Metadata: metadata,
   };
 
   s3.putObject(s3Params, function (error) {
