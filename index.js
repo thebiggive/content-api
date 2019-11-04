@@ -77,7 +77,7 @@ exports.handler = function (event, context, callback) {
 
       const s3Params = {
         ACL: 'public-read',
-        Body: decodedImage,
+        Body: processedImage,
         Bucket: process.env.S3_BUCKET,
         ContentType: mimeType.mime,
         Key: path,
