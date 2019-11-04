@@ -1,6 +1,6 @@
 # The Big Give Content API
 
-This is a Node.js project currently containing a single function for AWS Lambda in `index.js`,
+This is a Node.js project currently containing a single function for AWS Lambda in `content-api-post.js`,
 which provides the `POST` endpoint for the Big Give's user-generated content API.
 
 ## Install packages and build Sharp for Lambda
