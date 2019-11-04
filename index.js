@@ -92,9 +92,7 @@ exports.handler = function (event, context, callback) {
         }
     
         callback(null, {"statusCode": 200, "body": JSON.stringify({
-          // TODO generalise base image handling so it looks like this
-          // 'uri': `${process.env.IMAGE_ACCESS_BASE_URI}/${path}`,
-          'uri': `https://${process.env.S3_BUCKET}.s3.eu-west-2.amazonaws.com/${path}`,
+          'uri': `${process.env.IMAGE_ACCESS_BASE_URI}/${path}`,
         })});
       });
     })
