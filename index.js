@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
 const AWS = require('aws-sdk');
 const fileType = require('file-type');
-const sharp = require('sharp')
+const sharp = require('sharp');
 const uuidv4 = require('uuid/v4');
 
 function fail(message, code, callback) {
@@ -98,6 +98,5 @@ exports.handler = function (event, context, callback) {
     })
     .catch(sharpError => {
       fail('Processing error: ' + sharpError, 500, callback);
-      return;
     })
-}
+};
