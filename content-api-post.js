@@ -27,7 +27,7 @@ exports.handler = function (event, context, callback) {
   const data = JSON.parse(event.body);
   const decodedImage = Buffer.from(data.body, 'base64');
 
-  if (!decodedImage || !data.accountId || !data.type) {
+  if (!decodedImage || !data.accountId || !data.championFundId || !data.type) {
     return fail('Missing required metadata', 400, callback);
   }
 
@@ -56,6 +56,9 @@ exports.handler = function (event, context, callback) {
         SalesforceAccountId: data.accountId,
       };
       // All remaining metadata keys are optional. We can't append `null`s as this is not a valid value for headers.
+      if (data.championFundId) {
+        metadata.SalesforceChampionFundId = data.championFundId;
+      }
       if (data.ccampaignId) {
         metadata.SalesforceCCampaignId = data.ccampaignId;
       }
