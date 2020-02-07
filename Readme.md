@@ -12,4 +12,4 @@ which provides the `POST` endpoint for the Big Give's user-generated content API
 
 * Zip up the *contents* of the folder (not the whole folder), including `node_modules/`. This
   need not include normally-hidden files like `.git*` metadata.
-* Upload [here](https://eu-west-2.console.aws.amazon.com/lambda/home?region=eu-west-2#/functions/content-api-post-sandbox?tab=graph).
+* Upload [here](https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/functions/tbg-staging-content-api-post?tab=configuration).
