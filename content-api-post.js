@@ -27,7 +27,7 @@ exports.handler = function (event, context, callback) {
   const data = JSON.parse(event.body);
   const decodedImage = Buffer.from(data.body, 'base64');
 
-  if (!decodedImage || !data.accountId || !data.championFundId || !data.type) {
+  if (!decodedImage || !(data.accountId && data.championFundId) || !data.type) {
     return fail('Missing required metadata', 400, callback);
   }
 
