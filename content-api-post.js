@@ -31,6 +31,10 @@ exports.handler = function (event, context, callback) {
     return fail('Missing required metadata', 400, callback);
   }
 
+  if (data.championFundId && data.ccampaignId) {
+    return fail('Id Mismatch', 400, callback);
+  }
+
   const mimeType = fileType(decodedImage);
   if (!mimeType) {
     return fail('Unrecognised file type', 400, callback);
