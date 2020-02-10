@@ -31,7 +31,7 @@ exports.handler = function (event, context, callback) {
     return fail('Missing required metadata', 400, callback);
   }
 
-  if (data.championFundId && data.ccampaignId) {
+  if (!data.accountId && data.championFundId && data.ccampaignId) {
     return fail('Id Mismatch', 400, callback);
   }
 
