@@ -27,8 +27,14 @@ exports.handler = function (event, context, callback) {
   const data = JSON.parse(event.body);
   const decodedImage = Buffer.from(data.body, 'base64');
 
-  if (!decodedImage || !data.accountId || !data.type) {
+  if (!decodedImage || (!data.accountId && !data.championFundId) || !data.type) {
     return fail('Missing required metadata', 400, callback);
+  }
+  
+  // If a championFundId is defined and either accountId and ccampaignID is defined
+  // then throw an Id Mistmatch error
+  if (data.championFundId && (data.accountId || data.ccampaignId)) {
+    return fail('Id Mismatch', 400, callback);
   }
 
   const mimeType = fileType(decodedImage);
@@ -51,10 +57,19 @@ exports.handler = function (event, context, callback) {
     .toBuffer()
     .then(processedImage => {
       const generatedName = `${uuidv4()}.${mimeType.ext}`;
-      const path = `${data.accountId}/${data.type}/${generatedName}`;
-      const metadata = {
-        SalesforceAccountId: data.accountId,
-      };
+      const salesforcePathId = data.accountId ? data.accountId : data.championFundId;
+      const path = `${salesforcePathId}/${data.type}/${generatedName}`;
+      const metadata = {};
+
+      // Assign the Account or Champion Fund record Id.
+      // We know at least one of these exist before reaching here
+      if (data.accountId) {
+        metadata.SalesforceAccountId = data.accountId;
+      }
+      if (data.championFundId) {
+        metadata.SalesforceChampionFundId = data.championFundId;
+      }
+
       // All remaining metadata keys are optional. We can't append `null`s as this is not a valid value for headers.
       if (data.ccampaignId) {
         metadata.SalesforceCCampaignId = data.ccampaignId;
