@@ -46,7 +46,7 @@ exports.handler = function (event, context, callback) {
 
   const maxSize = 2500;
 
-  // Assign the Account record or Champion Fund Id.
+  // Assign the Account or Champion Fund record Id.
   // We know at least one of these exist before reaching here
   SalesforceId = data.accountId ? data.accountId : data.championFundId;
 
