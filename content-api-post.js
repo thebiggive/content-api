@@ -35,6 +35,10 @@ exports.handler = function (event, context, callback) {
     return fail('Id Mismatch', 400, callback);
   }
 
+  if (data.accountId && data.championFundId) {
+    return fail('Id Mismatch', 400, callback);
+  }
+
   const mimeType = fileType(decodedImage);
   if (!mimeType) {
     return fail('Unrecognised file type', 400, callback);
