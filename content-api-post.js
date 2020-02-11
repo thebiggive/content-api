@@ -30,8 +30,10 @@ exports.handler = function (event, context, callback) {
   if (!decodedImage || (!data.accountId && !data.championFundId) || !data.type) {
     return fail('Missing required metadata', 400, callback);
   }
-
-  if (data.accountId && data.championFundId || data.championFundId && data.ccampaignId) {
+  
+  // If a championFundId is defined and either accountId and ccampaignID is defined
+  // then throw an Id Mistmatch error
+  if (data.championFundId && (data.accountId || data.ccampaignId)) {
     return fail('Id Mismatch', 400, callback);
   }
 
