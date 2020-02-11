@@ -42,6 +42,10 @@ exports.handler = function (event, context, callback) {
 
   const maxSize = 2500;
 
+  // Assign the Account record or Champion Fund Id.
+  // We know at least one of these exist before reaching here
+  SalesforceId = data.accountId ? data.accountId : data.championFundId;
+
   sharp(decodedImage)
     .resize({
       fit: sharp.fit.inside,
@@ -55,14 +59,18 @@ exports.handler = function (event, context, callback) {
     .toBuffer()
     .then(processedImage => {
       const generatedName = `${uuidv4()}.${mimeType.ext}`;
-      const path = `${data.accountId}/${data.type}/${generatedName}`;
-      const metadata = {
-        SalesforceAccountId: data.accountId,
-      };
-      // All remaining metadata keys are optional. We can't append `null`s as this is not a valid value for headers.
-      if (data.championFundId) {
-        metadata.SalesforceChampionFundId = data.championFundId;
+      const path = `${SalesforceId}/${data.type}/${generatedName}`;
+      const metadata = {};
+
+      // Assign the dynamic SF Id to the correct metadata
+      if (data.accountId) {
+        metadata.SalesforceAccountId = SalesforceId;
       }
+      if (data.championFundId) {
+        metadata.SalesforceChampionFundId = SalesforceId;
+      }
+
+      // All remaining metadata keys are optional. We can't append `null`s as this is not a valid value for headers.
       if (data.ccampaignId) {
         metadata.SalesforceCCampaignId = data.ccampaignId;
       }
