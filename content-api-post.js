@@ -59,7 +59,7 @@ exports.handler = function (event, context, callback) {
     .toBuffer()
     .then(processedImage => {
       const generatedName = `${uuidv4()}.${mimeType.ext}`;
-      const salesforcePathId  = data.accountId ? data.accountId : data.championFundId;
+      const salesforcePathId = data.accountId ? data.accountId : data.championFundId;
       const path = `${salesforcePathId}/${data.type}/${generatedName}`;
       const metadata = {};
 
