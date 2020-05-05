@@ -14,6 +14,16 @@ function fail(message, code, callback) {
   callback(null, {"statusCode": code, "body": message});
 }
 
+/**
+ * Get a version of untrusted input which contains only printable, UTF-8 range characters.
+ * @param {string} input
+ * @returns {string}
+ * Adapted from {@link https://stackoverflow.com/a/32958072/2803757}
+ */
+function metadataEscape(input) {
+  return input.replace(new RegExp('[^\u0020-\u007e\u00a0-\u00ff]+', 'gu'), '');
+}
+
 exports.handler = function (event, context, callback) {
   if (!process.env.ACCESS_KEY || !process.env.S3_BUCKET) {
     return fail('Required env vars not configured', 500, callback);
@@ -78,13 +88,13 @@ exports.handler = function (event, context, callback) {
         metadata.SalesforceContentDocumentId = data.contentDocumentId;
       }
       if (data.contentType) {
-        metadata.SalesforceContentType = data.contentType;
+        metadata.SalesforceContentType = metadataEscape(data.contentType);
       }
       if (data.contentVersionId) {
         metadata.SalesforceContentVersionId = data.contentVersionId;
       }
       if (data.name) {
-        metadata.SalesforceFilename = data.name;
+        metadata.SalesforceFilename = metadataEscape(data.name);
       }
       if (data.userId) {
         metadata.SalesforceUserId = data.userId;
