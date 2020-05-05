@@ -30,7 +30,7 @@ exports.handler = function (event, context, callback) {
   if (!decodedImage || (!data.accountId && !data.championFundId) || !data.type) {
     return fail('Missing required metadata', 400, callback);
   }
-  
+
   // If a championFundId is defined and either accountId and ccampaignID is defined
   // then throw an Id Mistmatch error
   if (data.championFundId && (data.accountId || data.ccampaignId)) {
@@ -102,10 +102,10 @@ exports.handler = function (event, context, callback) {
       const s3 = new AWS.S3({signatureVersion: 'v4'});
       s3.putObject(s3Params, function (error) {
         if (error) {
-          fail('Save error: ' + error, 500, callback);
+          fail(`Save error: ${error}. Metadata: ` + JSON.stringify(metadata), 500, callback);
           return;
         }
-    
+
         callback(null, {"statusCode": 200, "body": JSON.stringify({
           'uri': `${process.env.IMAGE_ACCESS_BASE_URI}/${path}`,
         })});
