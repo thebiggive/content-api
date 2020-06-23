@@ -15,13 +15,16 @@ function fail(message, code, callback) {
 }
 
 /**
- * Get a version of untrusted input which contains only printable, UTF-8 range characters.
+ * Get a version of untrusted input which is URL-encoded for S3 metadata storage.
+ * Note that *when using REST* as the S3 SDK does, values only reliably support
+ * US-ASCII and not UTF-8, hence the more aggressive encoding.
+ * {@link https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html}
+ *
  * @param {string} input
  * @returns {string}
- * Adapted from {@link https://stackoverflow.com/a/32958072/2803757}
  */
 function metadataEscape(input) {
-  return input.replace(new RegExp('[^\u0020-\u007e\u00a0-\u00ff]+', 'gu'), '');
+  return encodeURIComponent(input);
 }
 
 exports.handler = function (event, context, callback) {
