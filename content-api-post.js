@@ -125,6 +125,11 @@ exports.handler = function (event, context, callback) {
       });
     })
     .catch(sharpError => {
+      if (sharpError.contains('VipsJpeg: Invalid SOS parameters for sequential JPEG')) {
+        fail('Processing error: corrupt JPEG, invalid SOS parameters', 400, callback);
+        return;
+      }
+
       fail('Processing error: ' + sharpError, 500, callback);
     })
 };
