@@ -57,7 +57,8 @@ exports.handler = function (event, context, callback) {
 
   const maxSize = 2500;
 
-  sharp(decodedImage)
+  // https://github.com/lovell/sharp/issues/1578#issuecomment-474299429
+  sharp(decodedImage, { failOnError: false })
     .resize({
       fit: sharp.fit.inside,
       withoutEnlargement: true,
@@ -124,8 +125,12 @@ exports.handler = function (event, context, callback) {
         })});
       });
     })
+
     .catch(sharpError => {
-      if (sharpError.includes('VipsJpeg: Invalid SOS parameters for sequential JPEG')) {
+      /**
+       * @param {Error} sharpError
+       */
+      if (sharpError.message.includes('VipsJpeg: Invalid SOS parameters for sequential JPEG')) {
         fail('Processing error: corrupt JPEG, invalid SOS parameters', 400, callback);
         return;
       }
