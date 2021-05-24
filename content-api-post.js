@@ -135,6 +135,11 @@ exports.handler = function (event, context, callback) {
         return;
       }
 
+      if (sharpError.message.includes('Input buffer contains unsupported image format')) {
+        fail('Processing error: unsupported image format', 400, callback);
+        return;
+      }
+
       fail('Processing error: ' + sharpError, 500, callback);
     })
 };
