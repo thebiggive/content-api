@@ -5,8 +5,10 @@ which provides the `POST` endpoint for the Big Give's user-generated content API
 
 ## Install packages and build Sharp for Lambda
 
+As per [instructions for Sharp on Lambda](https://sharp.pixelplumbing.com/en/stable/install/#aws-lambda):
+
 * `npm install`
-* Follow [instructions for Sharp on Lambda](https://sharp.pixelplumbing.com/en/stable/install/#aws-lambda) (Docker approach on Linux).
+* `SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux sharp`
 
 ## Upload Lambda package manually
 
