@@ -1,6 +1,6 @@
 {
   "name": "tbg-content-api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "API to handle the Big Give's user-generated content",
   "main": "content-api-post.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "dependencies": {
     "aws-sdk": "^2.641.0",
     "file-type": "^12.4.2",
-    "sharp": "^0.23.4",
+    "sharp": "~0.29.3",
     "uuid": "^3.4.0"
   }
 }
