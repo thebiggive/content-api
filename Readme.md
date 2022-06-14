@@ -8,8 +8,8 @@ which provides the `POST` endpoint for the Big Give's user-generated content API
 As per [instructions for Sharp on Lambda](https://sharp.pixelplumbing.com/en/stable/install/#aws-lambda):
 
 * `npm install`
-* `rm -r node_modules/sharp` – contrary to the instructions above, I've found I had to explicitly delete the host platform binaries for new ones to get made.
-* `SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux sharp`
+* `rm -rf node_modules/sharp`
+* `SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux --libc=glibc sharp`
 
 ## Upload Lambda package manually
 
