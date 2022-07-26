@@ -27,7 +27,7 @@ function metadataEscape(input) {
   return encodeURIComponent(input);
 }
 
-exports.handler = function (event, context, callback) {
+export const handler = (event, context, callback) => {
   if (!process.env.ACCESS_KEY || !process.env.S3_BUCKET) {
     return fail('Required env vars not configured', 500, callback);
   }
