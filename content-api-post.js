@@ -6,13 +6,12 @@ import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 
 function fail(message, code) {
-  if (code === 500) {
-    throw new Error(message);
-  }
-
   return {
     statusCode: code,
     body: message,
+    headers: {
+      'Content-Type': 'text/plain',
+    },
   };
 }
 
@@ -118,15 +117,17 @@ export const handler = async (event) => {
       const s3 = new AWS.S3({signatureVersion: 'v4'});
       s3.putObject(s3Params, function (error) {
         if (error) {
-          fail(`Save error: ${error}. Metadata: ` + JSON.stringify(metadata), 500);
-          return;
+          return fail(`Save error: ${error}. Metadata: ` + JSON.stringify(metadata), 500);
         }
 
         return {
           statusCode: 200,
           body: JSON.stringify({
             'uri': `${process.env.IMAGE_ACCESS_BASE_URI}/${path}`,
-          })
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         };
       });
     })
@@ -136,15 +137,13 @@ export const handler = async (event) => {
        * @param {Error} sharpError
        */
       if (sharpError.message.includes('VipsJpeg: Invalid SOS parameters for sequential JPEG')) {
-        fail('Processing error: corrupt JPEG, invalid SOS parameters', 400);
-        return;
+        return fail('Processing error: corrupt JPEG, invalid SOS parameters', 400);
       }
 
       if (sharpError.message.includes('Input buffer contains unsupported image format')) {
-        fail('Processing error: unsupported image format', 400);
-        return;
+        return fail('Processing error: unsupported image format', 400);
       }
 
-      fail('Processing error: ' + sharpError, 500);
+      return fail('Processing error: ' + sharpError, 500);
     })
 };
