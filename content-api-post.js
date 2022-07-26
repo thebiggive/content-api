@@ -58,7 +58,7 @@ export const handler = async (event, context, callback) => {
   const maxSize = 2500;
 
   // https://github.com/lovell/sharp/issues/1578#issuecomment-474299429
-  sharp(decodedImage, { failOnError: false })
+  sharp(decodedImage)
     .resize({
       fit: sharp.fit.inside,
       withoutEnlargement: true,
