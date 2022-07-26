@@ -1,9 +1,10 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const fileType = require('file-type');
 const sharp = require('sharp');
 const uuidv4 = require('uuid/v4');
+
+import { fileTypeFromBuffer } from 'file-type';
 
 function fail(message, code, callback) {
   if (code == 500) {
@@ -50,7 +51,7 @@ exports.handler = function (event, context, callback) {
     return fail('Id Mismatch', 400, callback);
   }
 
-  const mimeType = fileType(decodedImage);
+  const mimeType = fileTypeFromBuffer(decodedImage);
   if (!mimeType) {
     return fail('Unrecognised file type', 400, callback);
   }
