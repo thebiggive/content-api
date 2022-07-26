@@ -27,7 +27,7 @@ function metadataEscape(input) {
   return encodeURIComponent(input);
 }
 
-export const handler = (event, context, callback) => {
+export const handler = async (event, context, callback) => {
   if (!process.env.ACCESS_KEY || !process.env.S3_BUCKET) {
     return fail('Required env vars not configured', 500, callback);
   }
@@ -50,7 +50,7 @@ export const handler = (event, context, callback) => {
     return fail('Id Mismatch', 400, callback);
   }
 
-  const mimeType = fileTypeFromBuffer(decodedImage);
+  const mimeType = await fileTypeFromBuffer(decodedImage);
   if (!mimeType) {
     return fail('Unrecognised file type', 400, callback);
   }
