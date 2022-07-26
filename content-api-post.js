@@ -5,13 +5,15 @@ import { fileTypeFromBuffer } from 'file-type';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 
-function fail(message, code, callback) {
-  if (code == 500) {
-    callback(new Error(message));
-    return;
+function fail(message, code) {
+  if (code === 500) {
+    throw new Error(message);
   }
 
-  callback(null, {"statusCode": code, "body": message});
+  return {
+    statusCode: code,
+    body: message,
+  };
 }
 
 /**
@@ -27,32 +29,32 @@ function metadataEscape(input) {
   return encodeURIComponent(input);
 }
 
-export const handler = async (event, context, callback) => {
+export const handler = async (event) => {
   if (!process.env.ACCESS_KEY || !process.env.S3_BUCKET) {
-    return fail('Required env vars not configured', 500, callback);
+    return fail('Required env vars not configured', 500);
   }
 
   const authGiven = event.headers.Authorization;
   if (authGiven.replace('Bearer ', '') !== process.env.ACCESS_KEY) {
-    return fail('Not authorised', 401, callback);
+    return fail('Not authorised', 401);
   }
 
   const data = JSON.parse(event.body);
   const decodedImage = Buffer.from(data.body, 'base64');
 
   if (!decodedImage || (!data.accountId && !data.championFundId) || !data.type) {
-    return fail('Missing required metadata', 400, callback);
+    return fail('Missing required metadata', 400);
   }
 
   // If a championFundId is defined and either accountId and ccampaignID is defined
   // then throw an Id Mistmatch error
   if (data.championFundId && (data.accountId || data.ccampaignId)) {
-    return fail('Id Mismatch', 400, callback);
+    return fail('Id Mismatch', 400);
   }
 
   const mimeType = await fileTypeFromBuffer(decodedImage);
   if (!mimeType) {
-    return fail('Unrecognised file type', 400, callback);
+    return fail('Unrecognised file type', 400);
   }
 
   const maxSize = 2500;
@@ -116,13 +118,16 @@ export const handler = async (event, context, callback) => {
       const s3 = new AWS.S3({signatureVersion: 'v4'});
       s3.putObject(s3Params, function (error) {
         if (error) {
-          fail(`Save error: ${error}. Metadata: ` + JSON.stringify(metadata), 500, callback);
+          fail(`Save error: ${error}. Metadata: ` + JSON.stringify(metadata), 500);
           return;
         }
 
-        callback(null, {"statusCode": 200, "body": JSON.stringify({
-          'uri': `${process.env.IMAGE_ACCESS_BASE_URI}/${path}`,
-        })});
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            'uri': `${process.env.IMAGE_ACCESS_BASE_URI}/${path}`,
+          })
+        };
       });
     })
 
@@ -131,15 +136,15 @@ export const handler = async (event, context, callback) => {
        * @param {Error} sharpError
        */
       if (sharpError.message.includes('VipsJpeg: Invalid SOS parameters for sequential JPEG')) {
-        fail('Processing error: corrupt JPEG, invalid SOS parameters', 400, callback);
+        fail('Processing error: corrupt JPEG, invalid SOS parameters', 400);
         return;
       }
 
       if (sharpError.message.includes('Input buffer contains unsupported image format')) {
-        fail('Processing error: unsupported image format', 400, callback);
+        fail('Processing error: unsupported image format', 400);
         return;
       }
 
-      fail('Processing error: ' + sharpError, 500, callback);
+      fail('Processing error: ' + sharpError, 500);
     })
 };
