@@ -3,7 +3,7 @@
 import AWS from 'aws-sdk';
 import { fileTypeFromBuffer } from 'file-type';
 import sharp from 'sharp';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 
 function fail(message, code, callback) {
   if (code == 500) {
