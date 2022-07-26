@@ -1,10 +1,9 @@
 'use strict';
 
-const AWS = require('aws-sdk');
-const sharp = require('sharp');
-const uuidv4 = require('uuid/v4');
-
+import AWS from 'aws-sdk';
 import { fileTypeFromBuffer } from 'file-type';
+import sharp from 'sharp';
+import uuidv4 from 'uuid/v4';
 
 function fail(message, code, callback) {
   if (code == 500) {
