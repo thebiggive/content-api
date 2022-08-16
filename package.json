@@ -1,6 +1,6 @@
 {
   "name": "tbg-content-api",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "type": "module",
   "description": "API to handle the Big Give's user-generated content",
   "main": "content-api-post.js",
@@ -10,12 +10,12 @@
   "author": "Noel Light-Hilary <tech@thebiggive.org.uk>",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "aws-sdk": "^2.641.0",
-    "file-type": "^17.1.4",
-    "sharp": "^0.30.6",
+    "aws-sdk": "^2.1195.0",
+    "file-type": "^17.1.6",
+    "sharp": "^0.30.7",
     "uuid": "^8.3.2"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   }
 }
