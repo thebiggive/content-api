@@ -150,6 +150,10 @@ export const handler = async (event) => {
             return reject(fail('Processing error: corrupt JPEG, invalid SOS parameters', 400));
           }
 
+          if (sharpError.message.includes('VipsJpeg: Premature end of input file')) {
+            return reject(fail('Processing error: corrupt JPEG, premature end of input file', 400));
+          }
+
           if (sharpError.message.includes('Input buffer contains unsupported image format')) {
             return reject(fail('Processing error: unsupported image format', 400));
           }
